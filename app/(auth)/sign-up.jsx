@@ -51,17 +51,18 @@ const SignUp = () => {
       <ScrollView>
         <View
           className="w-full flex justify-center h-full px-4 my-6"
-          style={{
-            minHeight: Dimensions.get("window").height - 100,
-          }}
         >
+          <View className="w-full flex justify-center items-center py-2">
           <Image
             source={images.logo}
-            resizeMode="contain"
-            className="w-[115px] h-[34px]"
+            className="w-[50px] h-[50px]"
+            resizeMode="contain rounded-lg"
           />
-
-          <Text className="text-2xl font-semibold text-[#3F3D56] mt-10 font-psemibold">
+          <Text className="text-sm font-bold text-[28px] py-4 text-[#3F3D56] mt-2 text-center">
+            Taskify
+          </Text>
+          </View>
+          <Text className="text-[18px] font-semibold text-[#3F3D56] mt-10 font-psemibold">
             Inscreva-se na Taskify
           </Text>
 

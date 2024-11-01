@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { View, Text, TextInput,Platform,Keyboard, TouchableOpacity, Image,KeyboardAvoidingView,TouchableWithoutFeedback } from "react-native";
 
 import { icons } from "../constants";
 
@@ -14,6 +14,10 @@ const FormField = ({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View className={`space-y-2 ${otherStyles}`}>
       <Text className="text-base text-[#3F3D56] font-pmedium">{title}</Text>
 
@@ -39,6 +43,8 @@ const FormField = ({
         )}
       </View>
     </View>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

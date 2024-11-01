@@ -1,9 +1,6 @@
 import profile from "../assets/images/profile.png";
-import thumbnail from "../assets/images/thumbnail.png";
 import onboarding from "../assets/images/onboarding.png";
-import path from "../assets/images/path.png";
 import logo from "../assets/images/logo.png";
-import logoSmall from "../assets/images/logo-small.png";
-import empty from "../assets/images/empty.png";
+import noresults from "../assets/images/noresults.png";
 
-export default { profile, thumbnail, onboarding, path, logo, logoSmall, empty };
+export default { noresults, profile, onboarding, logo };
