@@ -1,37 +1,45 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
 
 import { images } from "../../constants";
-import { createUser } from "../../lib/appwrite";
 import { CustomButton, FormField } from "../../components";
-import { useGlobalContext } from "../../context/GlobalProvider";
+import { useGlobalContext } from "../../context/GlobalProvider"; // Import the context
 
 const SignUp = () => {
-  const { setUser, setIsLogged } = useGlobalContext();
-
+  const { setUser, setIsLogged, signUp } = useGlobalContext(); // Destructure signUp from context
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
 
   const submit = async () => {
-    if (form.username === "" || form.email === "" || form.password === "") {
-      Alert.alert("Error", "Please fill in all fields");
+    if (!form.name || !form.email || !form.password) {
+      Alert.alert("Error", "Por favor preencha todos os campos");
+      return;
     }
-
+    // console.log(`Before send to api ${form.name}, ${form.email}, ${form.password}}`)
     setSubmitting(true);
     try {
-      const result = await createUser(form.email, form.password, form.username);
-      setUser(result);
-      setIsLogged(true);
+      const response = await signUp({ name:form.name, email:form.email, password:form.password,}); // Call signUp function from context
 
-      router.replace("/home");
+      const data = await response.json();
+      if (response.ok) {
+        // If the response is successful (status code 200–299)
+        console.log("Sign-up successful:", data.message);
+        router.replace("/sign-in"); // Navigate to home screen
+      } else {
+        // If the response has a non-2xx status code
+        console.error("Sign-up failed:", data.message);
+       
+      }
+
+      
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", error.message || "Falha ao inscrever-se.");
     } finally {
       setSubmitting(false);
     }
@@ -52,19 +60,21 @@ const SignUp = () => {
             className="w-[115px] h-[34px]"
           />
 
-          <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Sign Up to Aora
+          <Text className="text-2xl font-semibold text-[#3F3D56] mt-10 font-psemibold">
+            Inscreva-se na Taskify
           </Text>
 
           <FormField
-            title="Username"
-            value={form.username}
-            handleChangeText={(e) => setForm({ ...form, username: e })}
+            title="Nome"
+            placeholder="Nome"
+            value={form.name}
+            handleChangeText={(e) => setForm({ ...form, name: e })}
             otherStyles="mt-10"
           />
 
           <FormField
             title="Email"
+            placeholder="abc@taskify.ao"
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-7"
@@ -74,12 +84,13 @@ const SignUp = () => {
           <FormField
             title="Password"
             value={form.password}
+            placeholder="Password"
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />
 
           <CustomButton
-            title="Sign Up"
+            title="Inscrever-se"
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isSubmitting}
@@ -87,13 +98,13 @@ const SignUp = () => {
 
           <View className="flex justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">
-              Have an account already?
+              Já tem conta?
             </Text>
             <Link
               href="/sign-in"
               className="text-lg font-psemibold text-secondary"
             >
-              Login
+              Conecte-se
             </Link>
           </View>
         </View>
