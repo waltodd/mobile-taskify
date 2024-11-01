@@ -8,21 +8,27 @@ import { images, icons } from "../../constants";
 import { EmptyState, SearchInput, Trending, TaskCard } from "../../components";
 const tasks = [
   {
+    _id:"2300",
     title: "Initial Setup for Redux Toolkit",
-    priority: "Baixa",
+    priority: "baixa",
     description: "Complete the initial setup for Redux Toolkit in the project.",
+    completed: false,
   },
   {
+    _id:"2301",
     title: "Design Authentication Flow",
-    priority: "Alta",
+    priority: "alta",
     description:
       "Plan and implement the user authentication flow using Redux Toolkit for managing state.",
+      completed: true,
   },
   {
+    _id:"2170",
     title: "Add Error Handling Middleware",
-    priority: "Média",
+    priority: "media",
     description:
       "Implement middleware in Redux Toolkit to catch and handle errors from asynchronous actions.",
+      completed: true,
   },
 ];
 
@@ -49,12 +55,12 @@ const Home = () => {
       <FlatList
         data={tasks}
         keyExtractor={(task) => task._id}
-        className="px-5"
+
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
           paddingBottom: 100,
         }}
-        renderItem={({ task }) => <TaskCard task={task} />}
+        renderItem={({ item }) => <TaskCard task={item} />}
         ListHeaderComponent={() => (
           <View className="flex my-6 px-4 space-y-6">
             <View className="flex justify-between items-start flex-row mb-4">

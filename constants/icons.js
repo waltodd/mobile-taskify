@@ -12,12 +12,18 @@ import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import done from "../assets/icons/done.png";
 import todo from "../assets/icons/todo.png";
+import edit from "../assets/icons/edit.png";
 import add from "../assets/icons/add.png";
+import trash from "../assets/icons/trash.png";
+import check from "../assets/icons/check.png";
 
 
 export default {
   add,
   todo,
+  check,
+  trash,
+  edit,
   done,
   bookmark,
   home,
