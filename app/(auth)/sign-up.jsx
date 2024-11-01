@@ -28,12 +28,13 @@ const SignUp = () => {
 
       const data = await response.json();
       if (response.ok) {
+        Alert.alert("Sucesso", "Utilizador criado com sucesso");
         // If the response is successful (status code 200–299)
         console.log("Sign-up successful:", data.message);
         router.replace("/sign-in"); // Navigate to home screen
       } else {
         // If the response has a non-2xx status code
-        console.error("Sign-up failed:", data.message);
+        console.error("Sign-up failed:", data);
        
       }
 
