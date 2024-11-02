@@ -33,11 +33,11 @@ const Welcome = () => {
 
           <Image
             source={images.onboarding}
-            className="max-w-[380px] w-full h-[298px]"
+            className="max-w-[360px] w-full h-[298px]"
             resizeMode="contain"
           />
 
-          <View className="relative mt-2">
+          <View className="relative mt-0">
           <Text className="text-sm font-bold text-[24px] py-4 text-[#3F3D56] mt-2 text-center">
           Bem-vindo ao Taskify! 🎉
           </Text>

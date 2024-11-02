@@ -9,7 +9,7 @@ import { getCurrentUser, signIn } from "../../lib/api";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignIn = () => {
-  const { setUser, setIsLogged } = useGlobalContext();
+  const { setUser, setTask, setIsLogged } = useGlobalContext();
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -17,22 +17,42 @@ const SignIn = () => {
   });
 
   const submit = async () => {
-    if (!form.email || !form.password ) {
+    if (!form.email || !form.password) {
       Alert.alert("Error", "Por favor preencha todos os campos");
     }
 
     setSubmitting(true);
 
     try {
-      await signIn(form.email, form.password);
-      const result = await getCurrentUser();
+      const {response} = await signIn({
+        email: form.email,
+        password: form.password,
+      });
 
-      console.log(`AFTER SIGN ${result}`)
-      setUser(result);
-      setIsLogged(true);
+      const data = await response.json();
 
-      Alert.alert("Sucesso", "Utilizador conectado com sucesso");
-      router.replace("/home");
+      if (response.ok) {
+        Alert.alert("Sucesso", "Utilizador criado com sucesso");
+        // If the response is successful (status code 200–299)
+        // console.log("Sign-up successful:", data);
+        const { token} =data
+
+        const {tasks,user} = await getCurrentUser({token});
+
+        setUser(user);
+        setTask(tasks);
+        setIsLogged(true)
+       
+        // setIsLogged(true)
+        router.replace("/home"); // Navigate to home screen
+      } else {
+        // If the response has a non-2xx status code
+        // console.error("Sign-up failed:", data.message);
+        Alert.alert("Error", data.message);
+       
+      }
+         
+      
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -43,23 +63,20 @@ const SignIn = () => {
   return (
     <SafeAreaView className="bg-[#FFFFFF] h-full">
       <ScrollView>
-        <View
-          className="w-full flex justify-center h-full px-4 my-6"
-          
-        >
+        <View className="w-full flex justify-center h-full px-4 my-6">
           <View className="w-full flex justify-center items-center py-2">
-          <Image
-            source={images.logo}
-            className="w-[50px] h-[50px]"
-            resizeMode="contain rounded-lg"
-          />
-          <Text className="text-sm font-bold text-[28px] py-4 text-[#3F3D56] mt-2 text-center">
-            Taskify
-          </Text>
+            <Image
+              source={images.logo}
+              className="w-[50px] h-[50px]"
+              resizeMode="contain rounded-lg"
+            />
+            <Text className="text-sm font-bold text-[28px] py-4 text-[#3F3D56] mt-2 text-center">
+              Taskify
+            </Text>
           </View>
 
           <Text className="text-[18px] font-semibold text-[#3F3D56] mt-10 font-psemibold">
-          Faça login no Taskify
+            Faça login no Taskify
           </Text>
 
           <FormField
@@ -88,7 +105,7 @@ const SignIn = () => {
 
           <View className="flex justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">
-            Não tem conta?
+              Não tem conta?
             </Text>
             <Link
               href="/sign-up"

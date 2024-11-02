@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, } from "react-native";
 
 import { icons } from "../constants";
 
 const TaskCard = ({ task }) => {
-  console.log("TESTE TASK", task);
+
   const priorityColor = (priority) => {
     switch (priority) {
       case "alta":
@@ -20,6 +20,7 @@ const TaskCard = ({ task }) => {
   };
   const handleToggleCompleted = () => {};
   return (
+    <ScrollView>
     <View className="bg-[#FFFFFF] flex flex-col items-center px-4 mb-4">
       <View className="w-full flex flex-row gap-1 py-2 items-start justify-center bg-[#F5F7F9] rounded-[16px]">
         <View
@@ -74,15 +75,16 @@ const TaskCard = ({ task }) => {
             flex: 0.2,
           }}
         >
-          <TouchableOpacity className=" bg-[#FFFFFF] justify-center items-center w-8 h-8 rounded-[12px] ">
+          <TouchableOpacity className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] ">
             <Image source={icons.edit} className="w-4 h-4" />
           </TouchableOpacity>
-          <TouchableOpacity className=" bg-[#FFFFFF] justify-center items-center w-8 h-8 rounded-[12px] ">
+          <TouchableOpacity className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] ">
             <Image source={icons.trash} className="w-4 h-4" />
           </TouchableOpacity>
         </View>
       </View>
     </View>
+    </ScrollView>
   );
 };
 

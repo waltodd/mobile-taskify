@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "cover",
+      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "scheme": "sora",
@@ -20,7 +20,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/splash.png",
         "backgroundColor": "#ffffff",
-        "resizeMode": "cover"
+        "resizeMode": "contain"
       },
       "package": "com.jsm.sora"
     },

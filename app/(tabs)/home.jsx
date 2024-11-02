@@ -3,53 +3,38 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, TouchableOpacity, Text, View } from "react-native";
 
 import { images, icons } from "../../constants";
-// import useAppwrite from "../../lib/useAppwrite";
+import { useGlobalContext } from "../../context/GlobalProvider"; // Import the context
+
 // import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, TaskCard } from "../../components";
-const tasks = [
-  {
-    _id:"2300",
-    title: "Initial Setup for Redux Toolkit",
-    priority: "baixa",
-    description: "Complete the initial setup for Redux Toolkit in the project.",
-    completed: false,
-  },
-  {
-    _id:"2301",
-    title: "Design Authentication Flow",
-    priority: "alta",
-    description:
-      "Plan and implement the user authentication flow using Redux Toolkit for managing state.",
-      completed: true,
-  },
-  {
-    _id:"2170",
-    title: "Add Error Handling Middleware",
-    priority: "media",
-    description:
-      "Implement middleware in Redux Toolkit to catch and handle errors from asynchronous actions.",
-      completed: true,
-  },
-];
+// const tasks = [
+//   {
+//     _id:"2300",
+//     title: "Initial Setup for Redux Toolkit",
+//     priority: "baixa",
+//     description: "Complete the initial setup for Redux Toolkit in the project.",
+//     completed: false,
+//   },
+//   {
+//     _id:"2301",
+//     title: "Design Authentication Flow",
+//     priority: "alta",
+//     description:
+//       "Plan and implement the user authentication flow using Redux Toolkit for managing state.",
+//       completed: true,
+//   },
+//   {
+//     _id:"2170",
+//     title: "Add Error Handling Middleware",
+//     priority: "media",
+//     description:
+//       "Implement middleware in Redux Toolkit to catch and handle errors from asynchronous actions.",
+//       completed: true,
+//   },
+// ];
 
 const Home = () => {
-  // const { data: posts, refetch } = useAppwrite(getAllPosts);
-  // const { data: latestPosts } = useAppwrite(getLatestPosts);
-
-  // const [refreshing, setRefreshing] = useState(false);
-
-  // const onRefresh = async () => {
-  //   setRefreshing(true);
-  //   await refetch();
-  //   setRefreshing(false);
-  // };
-
-  // one flatlist
-  // with list header
-  // and horizontal flatlist
-
-  //  we cannot do that with just scrollview as there's both horizontal and vertical scroll (two flat lists, within trending)
-
+  const { user, tasks } = useGlobalContext();
   return (
     <SafeAreaView className="bg-[#FFFFFF] h-full">
       <FlatList
@@ -87,28 +72,30 @@ const Home = () => {
                 
               </Text>
               <Text className="text-lg font-psemibold text-[#1dc071]">
-                  Micahel {" "}👋
+                  {user?.name} {" "}👋
                 </Text>
             </View>
             <View className="">
-              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">7 </Text>tarefas para fazer.</Text>
+              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">{tasks.length}{" "}</Text>tarefas para fazer.</Text>
             </View>
           </View>
         )}
         ListEmptyComponent={() => (
-          <View>
+          <View className="w-full pb-9 h-full flex flex-col justify-center items-center mt-8">
             <Image
               source={images.noresults}
-              className="w-9 h-10"
+              className="w-[50px] h-[50px]"
               resizeMode="contain"
             />
-            <Text className="text-2xl font-psemibold text-[#3F3D56]">
+            <Text className="text-[14px] py-2 font-psemibold text-[#3F3D56]">
               Nenhuma tarefa encontrada
             </Text>
-            <TouchableOpacity className="justify-center items-center w-10 h-10 rounded-full bg-white">
-              <Image source={icons.pluscolor} className="w-4 h-4" />
-              <Text className="text-2xl font-psemibold text-white">
-                Nenhuma tarefa encontrada
+            <TouchableOpacity className="flex flex-row bg-[#1dc071] justify-center items-center px-3 py-2 rounded-[12px]"
+            
+            >
+              <Image source={icons.add} className="w-4 h-4" />
+              <Text className="text-[18px]  text-[#FFFFFF] pl-2">
+                Nova tarefa
               </Text>
             </TouchableOpacity>
           </View>

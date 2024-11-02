@@ -8,6 +8,7 @@ export const useGlobalContext = () => useContext(GlobalContext);
 const GlobalProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState(null);
+  const [tasks, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Load the user's session from AsyncStorage on app start
@@ -18,6 +19,7 @@ const GlobalProvider = ({ children }) => {
         if (storedToken) {
           // Validate token by fetching current user info
           const currentUser = await getCurrentUser(storedToken);
+          console.log(currentUser)
           if (currentUser) {
             setIsLogged(true);
             setUser(currentUser);
@@ -37,7 +39,7 @@ const GlobalProvider = ({ children }) => {
 
   const handleSignIn = async (email, password) => {
     try {
-      const { token, user } = await signIn(email, password); // Sign in and retrieve token
+      const { token, user } = await signIn({email, password}); // Sign in and retrieve token
       await AsyncStorage.setItem("authToken", token); // Store token in AsyncStorage
       setIsLogged(true);
       setUser(user);
@@ -66,6 +68,8 @@ const GlobalProvider = ({ children }) => {
         setIsLogged,
         user,
         setUser,
+        tasks,
+        setTask,
         loading,
         signIn: handleSignIn,
         signOut: handleSignOut,
