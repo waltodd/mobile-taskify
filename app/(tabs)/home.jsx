@@ -71,7 +71,7 @@ const handleLogout = async () => {
                 </Text>
             </View>
             <View className="">
-              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">{tasks.length}{" "}</Text>tarefas para fazer.</Text>
+              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">{pendingTasks.length}{" "}</Text>tarefas para fazer.</Text>
             </View>
           </View>
         )}
@@ -96,6 +96,7 @@ const handleLogout = async () => {
           </View>
         )}
       />
+     
     </SafeAreaView>
   );
 };

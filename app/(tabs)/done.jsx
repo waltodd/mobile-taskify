@@ -12,12 +12,12 @@ const Done = () => {
   const { user, tasks } = useGlobalContext();
 
   // Filter only pending tasks
-  const pendingTasks = tasks.filter((task) => task.completed);
+  const completedTasks = tasks.filter((task) => task.completed);
 
   return (
     <SafeAreaView className="bg-[#FFFFFF] h-full">
       <FlatList
-        data={pendingTasks}
+        data={completedTasks}
         keyExtractor={(task) => task._id}
 
         keyboardShouldPersistTaps="handled"
@@ -55,7 +55,7 @@ const Done = () => {
                 </Text>
             </View>
             <View className="">
-              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">{tasks.length}{" "}</Text>tarefas concluidas.</Text>
+              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">{completedTasks.length}{" "}</Text>tarefas concluidas.</Text>
             </View>
           </View>
         )}
