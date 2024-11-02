@@ -1,19 +1,33 @@
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, TouchableOpacity, Text, View } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { images, icons } from "../../constants";
 import { useGlobalContext } from "../../context/GlobalProvider"; // Import the context
-
+import { Link, router } from "expo-router";
 // import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, TaskCard } from "../../components";
 
 const Home = () => {
-  const { user, tasks } = useGlobalContext();
+  const { user, tasks, setIsLogged,setUser } = useGlobalContext();
 
   // Filter only pending tasks
   const pendingTasks = tasks.filter((task) => !task.completed);
+const handleLogout = async () => {
+  try {
+    // Remove the token from AsyncStorage
+    await AsyncStorage.removeItem("authToken");
 
+    // Update the global state
+    setIsLogged(false);
+    setUser(null);
+
+    // Navigate to the sign-in page
+    router.replace("/sign-in");
+  } catch (error) {
+    console.error("Error signing out:", error);
+  }
+}
   return (
     <SafeAreaView className="bg-[#FFFFFF] h-full">
       <FlatList
@@ -40,7 +54,9 @@ const Home = () => {
               </View>
               <View className="flex flex-row justify-items items-center gap-x-2">
                
-              <TouchableOpacity className=" bg-[#F5F7F9] justify-center items-center w-10 h-10 rounded-full ">
+              <TouchableOpacity className=" bg-[#F5F7F9] justify-center items-center w-10 h-10 rounded-full "
+              onPress={() =>handleLogout()}
+              >
                 <Image source={icons.logout} className="w-5 h-5" />
               </TouchableOpacity>
               </View>

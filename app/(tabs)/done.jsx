@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, TouchableOpacity, Text, View } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { images, icons } from "../../constants";
 import { useGlobalContext } from "../../context/GlobalProvider"; // Import the context
 
 // import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
-import { EmptyState, SearchInput, Trending, TaskCard } from "../../components";
+import {  SearchInput,TaskCard } from "../../components";
 
 const Done = () => {
   const { user, tasks } = useGlobalContext();

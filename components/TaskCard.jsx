@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
-import { View, Text, TouchableOpacity, Image, ScrollView, } from "react-native";
-
+import { View, Text, TouchableOpacity, Image,Alert, ScrollView, } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { icons } from "../constants";
+import { useGlobalContext } from "../context/GlobalProvider";
+import { getCurrentUser, deleteTask } from "../lib/api";
+import { Link, router } from "expo-router";
 
 const TaskCard = ({ task }) => {
-
+  const { user, setTask, setIsLogged,setUser } = useGlobalContext();
   const priorityColor = (priority) => {
     switch (priority) {
       case "alta":
@@ -19,6 +22,83 @@ const TaskCard = ({ task }) => {
     }
   };
   const handleToggleCompleted = () => {};
+
+  const handleEditTask = async () => {
+    if (!form.title || !form.description || !form.priority) {
+      return Alert.alert("Forneça todos os campos");
+    }
+
+    // setSubmitting(true);
+
+    const {value} = form.priority
+    try {
+      const response = await createTask({
+        title: form.title,
+        description: form.description,
+        priority:  value,
+      });
+
+   
+
+      if (response.ok) {
+
+        const token = await AsyncStorage.getItem("authToken");
+        const {tasks} = await getCurrentUser({token});
+        setTask(tasks);
+        Alert.alert("Success", "Tarefa criada com sucesso");
+        // setIsLogged(true)
+        router.replace("/home"); // Navigate to home screen
+      } else {
+        // If the response has a non-2xx status code
+        // console.error("Sign-up failed:", data.message);
+        Alert.alert("Error", "Algo correu mal, tente novamente");
+       
+      }
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setForm({
+        title: "",
+        description: "",
+        priority: "",
+      });
+
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!task) {
+      return Alert.alert("Forneça todos os campos");
+    }
+    const id  = task._id;
+    try {
+      const response = await deleteTask({
+        id
+      });
+
+   
+
+      if (response.ok) {
+
+        const token = await AsyncStorage.getItem("authToken");
+        const {tasks} = await getCurrentUser({token});
+        setTask(tasks);
+        Alert.alert("Success", "Tarefa apagada com sucesso");
+        // setIsLogged(true)
+        router.replace("/home"); // Navigate to home screen
+      } else {
+        // If the response has a non-2xx status code
+        // console.error("Sign-up failed:", data.message);
+        Alert.alert("Error", "Algo correu mal, tente novamente");
+       
+      }
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      
+    }
+  };
   return (
     <ScrollView>
     <View className="bg-[#FFFFFF] flex flex-col items-center px-4 mb-4">
@@ -75,10 +155,14 @@ const TaskCard = ({ task }) => {
             flex: 0.2,
           }}
         >
-          <TouchableOpacity className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] ">
+          <TouchableOpacity className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] "
+          onPress={() => handleEditTask()}
+          >
             <Image source={icons.edit} className="w-4 h-4" />
           </TouchableOpacity>
-          <TouchableOpacity className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] ">
+          <TouchableOpacity className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] "
+          onPress={() => handleDeleteTask(task)}
+          >
             <Image source={icons.trash} className="w-4 h-4" />
           </TouchableOpacity>
         </View>

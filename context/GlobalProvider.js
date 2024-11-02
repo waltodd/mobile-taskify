@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getCurrentUser, signIn, signOut, signUp } from "../lib/api"; // Import your auth functions
+import { getCurrentUser, signIn, signUp } from "../lib/api"; // Import your auth functions
 import { router } from "expo-router";
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -53,7 +53,6 @@ const GlobalProvider = ({ children }) => {
         setTask,
         loading,
         signIn, 
-        signOut,
         signUp,
         setToken
       }}
