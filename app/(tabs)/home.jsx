@@ -7,38 +7,17 @@ import { useGlobalContext } from "../../context/GlobalProvider"; // Import the c
 
 // import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, TaskCard } from "../../components";
-// const tasks = [
-//   {
-//     _id:"2300",
-//     title: "Initial Setup for Redux Toolkit",
-//     priority: "baixa",
-//     description: "Complete the initial setup for Redux Toolkit in the project.",
-//     completed: false,
-//   },
-//   {
-//     _id:"2301",
-//     title: "Design Authentication Flow",
-//     priority: "alta",
-//     description:
-//       "Plan and implement the user authentication flow using Redux Toolkit for managing state.",
-//       completed: true,
-//   },
-//   {
-//     _id:"2170",
-//     title: "Add Error Handling Middleware",
-//     priority: "media",
-//     description:
-//       "Implement middleware in Redux Toolkit to catch and handle errors from asynchronous actions.",
-//       completed: true,
-//   },
-// ];
 
 const Home = () => {
   const { user, tasks } = useGlobalContext();
+
+  // Filter only pending tasks
+  const pendingTasks = tasks.filter((task) => !task.completed);
+
   return (
     <SafeAreaView className="bg-[#FFFFFF] h-full">
       <FlatList
-        data={tasks}
+        data={pendingTasks}
         keyExtractor={(task) => task._id}
 
         keyboardShouldPersistTaps="handled"

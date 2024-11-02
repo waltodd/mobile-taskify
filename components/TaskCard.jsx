@@ -34,7 +34,7 @@ const TaskCard = ({ task }) => {
               className={`w-[34px] h-[34px]  cursor-pointer flex justify-center items-center rounded-md border-[#C6CFDC] border-[2px] ${
                 task?.completed ? "bg-[#1dc071] border-[#1dc071]" : ""
               }`}
-              onClick={() => handleToggleCompleted(task)}
+              onPress={() => handleToggleCompleted(task)}
             >
               {task?.completed && (
                 <Image

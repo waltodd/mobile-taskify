@@ -19,7 +19,7 @@ const FormField = ({
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View className={`space-y-2 ${otherStyles}`}>
-      <Text className="text-base text-[#3F3D56] font-pmedium">{title}</Text>
+      <Text className="text-[#3F3D56] font-psemibold text-base">{title}</Text>
 
       <View className="w-full h-16 px-4 bg-[#F5F7F9] rounded-2xl border-2 border-[#C6CFDC] focus:border-[#1dc071]  flex flex-row items-center">
         <TextInput

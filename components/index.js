@@ -6,9 +6,13 @@ import Loader from "./Loader";
 import Trending from "./Trending";
 import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
+import CustomDropdown from "./CustomDropdown";
+import FormFieldTextArea from "./FormFieldTextArea";
 
 export {
   TaskCard,
+  FormFieldTextArea,
+  CustomDropdown,
   FormField,
   CustomButton,
   InfoBox,

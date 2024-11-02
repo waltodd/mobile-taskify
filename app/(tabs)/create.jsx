@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { router } from "expo-router";
 import { ResizeMode, Video } from "expo-av";
-import * as DocumentPicker from "expo-document-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
@@ -14,166 +13,118 @@ import {
 
 import { icons } from "../../constants";
 // import { createVideoPost } from "../../lib/appwrite";
-import { CustomButton, FormField } from "../../components";
+import {
+  CustomButton,
+  FormField,
+  FormFieldTextArea,
+  CustomDropdown,
+} from "../../components";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Create = () => {
   const { user } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
+  const [taskComplted, setTaskComplted] = useState(false);
   const [form, setForm] = useState({
     title: "",
-    video: null,
-    thumbnail: null,
-    prompt: "",
+    description: "",
+    priority: "",
   });
-
-  const openPicker = async (selectType) => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type:
-        selectType === "image"
-          ? ["image/png", "image/jpg"]
-          : ["video/mp4", "video/gif"],
-    });
-
-    if (!result.canceled) {
-      if (selectType === "image") {
-        setForm({
-          ...form,
-          thumbnail: result.assets[0],
-        });
-      }
-
-      if (selectType === "video") {
-        setForm({
-          ...form,
-          video: result.assets[0],
-        });
-      }
-    } else {
-      setTimeout(() => {
-        Alert.alert("Document picked", JSON.stringify(result, null, 2));
-      }, 100);
-    }
-  };
+ 
 
   const submit = async () => {
-    if (
-      (form.prompt === "") |
-      (form.title === "") |
-      !form.thumbnail |
-      !form.video
-    ) {
-      return Alert.alert("Please provide all fields");
+    if (!title || !description || !priority) {
+      return Alert.alert("Forneça todos os campos");
     }
 
     setUploading(true);
-    try {
-      await createVideoPost({
-        ...form,
-        userId: user.$id,
-      });
+    // try {
+    //   await createVideoPost({
+    //     ...form,
+    //     userId: user.$id,
+    //   });
 
-      Alert.alert("Success", "Post uploaded successfully");
-      router.push("/home");
-    } catch (error) {
-      Alert.alert("Error", error.message);
-    } finally {
-      setForm({
-        title: "",
-        video: null,
-        thumbnail: null,
-        prompt: "",
-      });
+    //   Alert.alert("Success", "Post uploaded successfully");
+    //   router.push("/home");
+    // } catch (error) {
+    //   Alert.alert("Error", error.message);
+    // } finally {
+    //   setForm({
+    //     title: "",
+    //     description: "",
+    //     priority: "",
+    //   });
 
-      setUploading(false);
-    }
+    //   setUploading(false);
+    // }
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView className="px-4 my-6">
-        <Text className="text-2xl text-white font-psemibold">Upload Video</Text>
-
-        <FormField
-          title="Video Title"
-          value={form.title}
-          placeholder="Give your video a catchy title..."
-          handleChangeText={(e) => setForm({ ...form, title: e })}
-          otherStyles="mt-10"
-        />
-
-        <View className="mt-7 space-y-2">
-          <Text className="text-base text-gray-100 font-pmedium">
-            Upload Video
-          </Text>
-
-          <TouchableOpacity onPress={() => openPicker("video")}>
-            {form.video ? (
-              <Video
-                source={{ uri: form.video.uri }}
-                className="w-full h-64 rounded-2xl"
-                useNativeControls
-                resizeMode={ResizeMode.COVER}
-                isLooping
-              />
-            ) : (
-              <View className="w-full h-40 px-4 bg-black-100 rounded-2xl border border-black-200 flex justify-center items-center">
-                <View className="w-14 h-14 border border-dashed border-secondary-100 flex justify-center items-center">
-                  <Image
-                    source={icons.upload}
-                    resizeMode="contain"
-                    alt="upload"
-                    className="w-1/2 h-1/2"
-                  />
-                </View>
-              </View>
-            )}
-          </TouchableOpacity>
+    <SafeAreaView className="bg-[#FFFFFF] h-full pb-[100px]">
+      <View className=" flex flex-col px-4 pt-6 my-6">
+        <Text className="text-2xl text-[#3F3D56] font-psemibold">
+          Criar Tarefa
+        </Text>
+        <View className="mb-2 w-full">
+          <FormField
+            title="Titulo"
+            value={form.title}
+            placeholder="O que está na sua mente?"
+            handleChangeText={(e) => setForm({ ...form, title: e })}
+            otherStyles="mt-2"
+          />
         </View>
-
-        <View className="mt-7 space-y-2">
-          <Text className="text-base text-gray-100 font-pmedium">
-            Thumbnail Image
+        <View className="mb-2 w-full">
+          <FormFieldTextArea
+            title="Descrição"
+            value={form.description}
+            placeholder="Adicione uma descrição..."
+            handleChangeText={(e) => setForm({ ...form, description: e })}
+            otherStyles="mt-2"
+          />
+        </View>
+        <View className="mt-2 w-full">
+          <Text className="text-[#3F3D56] font-psemibold text-base">
+            {" "}
+            Selecione Prioridade
           </Text>
-
-          <TouchableOpacity onPress={() => openPicker("image")}>
-            {form.thumbnail ? (
+          <CustomDropdown
+            title="Selecione Prioridade"
+            selectedValue={form.priority}
+            onChange={(value) =>
+              setForm((prev) => ({ ...prev, priority: value }))
+            } // Update priority
+          />
+        </View>
+        <View className="flex flex-row justify-cneter items-center mt-4">
+          <TouchableOpacity
+            className={`w-[34px] h-[34px]  cursor-pointer flex justify-center items-center rounded-md border-[#C6CFDC] border-[2px] ${
+              taskComplted ? "bg-[#1dc071] border-[#1dc071]" : ""
+            }`}
+            onPress={() => setTaskComplted(!taskComplted)}
+          >
+            {taskComplted && (
               <Image
-                source={{ uri: form.thumbnail.uri }}
-                resizeMode="cover"
-                className="w-full h-64 rounded-2xl"
+                source={icons.check}
+                resizeMode="contain"
+                className="w-4 h-4 rounded-lg "
               />
-            ) : (
-              <View className="w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 flex justify-center items-center flex-row space-x-2">
-                <Image
-                  source={icons.upload}
-                  resizeMode="contain"
-                  alt="upload"
-                  className="w-5 h-5"
-                />
-                <Text className="text-sm text-gray-100 font-pmedium">
-                  Choose a file
-                </Text>
-              </View>
             )}
           </TouchableOpacity>
+          <Text className="text-[#3F3D56] font-psemibold text-base">
+            {" "}
+            Marcar como Concluida
+          </Text>
         </View>
-
-        <FormField
-          title="AI Prompt"
-          value={form.prompt}
-          placeholder="The AI prompt of your video...."
-          handleChangeText={(e) => setForm({ ...form, prompt: e })}
-          otherStyles="mt-7"
-        />
-
-        <CustomButton
-          title="Submit & Publish"
-          handlePress={submit}
-          containerStyles="mt-7"
-          isLoading={uploading}
-        />
-      </ScrollView>
+        <View className="mt-2 w-full">
+          <CustomButton
+            title="Salvar tarefa"
+            handlePress={submit}
+            containerStyles="mt-7"
+            isLoading={uploading}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
