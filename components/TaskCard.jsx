@@ -12,7 +12,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { icons } from "../constants";
 import { useGlobalContext } from "../context/GlobalProvider";
-import { getCurrentUser, deleteTask ,updateTask} from "../lib/api";
+import { getCurrentUser, deleteTask ,updateTask,markTaskAsCompleted} from "../lib/api";
 import { Link, router } from "expo-router";
 import {
   CustomButton,
@@ -42,8 +42,7 @@ const TaskCard = ({ task }) => {
         return ""; // Default color for undefined priority
     }
   };
-  const handleToggleCompleted = () => {};
-
+ 
 
   const handleToggle = () => {
     setShowSuccessModal(true);
@@ -127,6 +126,35 @@ const TaskCard = ({ task }) => {
     } finally {
     }
   };
+
+  const  handleMarkAsComplete= async () => {
+    Alert.alert("ENTROu");
+    if (!task) {
+      return Alert.alert("Forneça todos os campos");
+    }
+    const id = task._id;
+    try {
+      const response = await markTaskAsCompleted({
+        id,
+      });
+
+      if (response.ok) {
+        const token = await AsyncStorage.getItem("authToken");
+        const { tasks } = await getCurrentUser({ token });
+        setTask(tasks);
+        Alert.alert("Success", "Tarefa concluida com sucesso");
+        // setIsLogged(true)
+        router.replace("/home"); // Navigate to home screen
+      } else {
+        // If the response has a non-2xx status code
+        // console.error("Sign-up failed:", data.message);
+        Alert.alert("Error", "Algo correu mal, tente novamente");
+      }
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+    }
+  };
   return (
     <ScrollView>
       <View className="bg-[#FFFFFF] flex flex-col items-center px-4 mb-4">
@@ -138,11 +166,11 @@ const TaskCard = ({ task }) => {
             }}
           >
             <View className="flex flex-row  items-center">
-              <View
+              <TouchableOpacity
                 className={`w-[34px] h-[34px]  cursor-pointer flex justify-center items-center rounded-md border-[#C6CFDC] border-[2px] ${
                   task?.completed ? "bg-[#1dc071] border-[#1dc071]" : ""
                 }`}
-                onPress={() => handleToggleCompleted(task)}
+                onPress={() => handleMarkAsComplete(task)}
               >
                 {task?.completed && (
                   <Image
@@ -151,7 +179,7 @@ const TaskCard = ({ task }) => {
                     className="w-4 h-4 rounded-lg "
                   />
                 )}
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
           <View
