@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
@@ -9,7 +10,7 @@ import { getCurrentUser, signIn } from "../../lib/api";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignIn = () => {
-  const { setUser, setTask, setIsLogged } = useGlobalContext();
+  const { setUser, setTask, setIsLogged,setToken } = useGlobalContext();
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -37,10 +38,14 @@ const SignIn = () => {
         // console.log("Sign-up successful:", data);
         const { token} =data
 
+        const storedToken = await AsyncStorage.setItem("authToken",token);
+
         const {tasks,user} = await getCurrentUser({token});
 
         setUser(user);
         setTask(tasks);
+        setToken(storedToken);
+        
         setIsLogged(true)
        
         // setIsLogged(true)

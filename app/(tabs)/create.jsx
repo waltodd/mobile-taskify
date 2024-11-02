@@ -10,9 +10,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { icons } from "../../constants";
-// import { createVideoPost } from "../../lib/appwrite";
+ import { createTask } from "../../lib/api";
 import {
   CustomButton,
   FormField,
@@ -20,11 +20,12 @@ import {
   CustomDropdown,
 } from "../../components";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { getCurrentUser, signIn } from "../../lib/api";
+
 
 const Create = () => {
-  const { user } = useGlobalContext();
-  const [uploading, setUploading] = useState(false);
-  const [taskComplted, setTaskComplted] = useState(false);
+  const { user, setTask } = useGlobalContext();
+  const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -33,30 +34,47 @@ const Create = () => {
  
 
   const submit = async () => {
-    if (!title || !description || !priority) {
+    if (!form.title || !form.description || !form.priority) {
       return Alert.alert("Forneça todos os campos");
     }
 
-    setUploading(true);
-    // try {
-    //   await createVideoPost({
-    //     ...form,
-    //     userId: user.$id,
-    //   });
+    setSubmitting(true);
 
-    //   Alert.alert("Success", "Post uploaded successfully");
-    //   router.push("/home");
-    // } catch (error) {
-    //   Alert.alert("Error", error.message);
-    // } finally {
-    //   setForm({
-    //     title: "",
-    //     description: "",
-    //     priority: "",
-    //   });
+    const {value} = form.priority
+    try {
+      const response = await createTask({
+        title: form.title,
+        description: form.description,
+        priority:  value,
+      });
 
-    //   setUploading(false);
-    // }
+   
+
+      if (response.ok) {
+
+        const token = await AsyncStorage.getItem("authToken");
+        const {tasks} = await getCurrentUser({token});
+        setTask(tasks);
+        Alert.alert("Success", "Tarefa criada com sucesso");
+        // setIsLogged(true)
+        router.replace("/home"); // Navigate to home screen
+      } else {
+        // If the response has a non-2xx status code
+        // console.error("Sign-up failed:", data.message);
+        Alert.alert("Error", "Algo correu mal, tente novamente");
+       
+      }
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setForm({
+        title: "",
+        description: "",
+        priority: "",
+      });
+
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -96,7 +114,7 @@ const Create = () => {
             } // Update priority
           />
         </View>
-        <View className="flex flex-row justify-cneter items-center mt-4">
+        {/* <View className="flex flex-row justify-cneter items-center mt-4">
           <TouchableOpacity
             className={`w-[34px] h-[34px]  cursor-pointer flex justify-center items-center rounded-md border-[#C6CFDC] border-[2px] ${
               taskComplted ? "bg-[#1dc071] border-[#1dc071]" : ""
@@ -115,13 +133,13 @@ const Create = () => {
             {" "}
             Marcar como Concluida
           </Text>
-        </View>
+        </View> */}
         <View className="mt-2 w-full">
           <CustomButton
             title="Salvar tarefa"
             handlePress={submit}
             containerStyles="mt-7"
-            isLoading={uploading}
+            isLoading={isSubmitting}
           />
         </View>
       </View>

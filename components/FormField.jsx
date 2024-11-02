@@ -23,7 +23,7 @@ const FormField = ({
 
       <View className="w-full h-16 px-4 bg-[#F5F7F9] rounded-2xl border-2 border-[#C6CFDC] focus:border-[#1dc071]  flex flex-row items-center">
         <TextInput
-          className="flex-1 text-[#3F3D56] font-psemibold text-base"
+          className="flex-1 text-[#3F3D56] font-psemibold text-[14px]"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
