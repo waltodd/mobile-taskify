@@ -12,14 +12,18 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { icons } from "../constants";
 import { useGlobalContext } from "../context/GlobalProvider";
-import { getCurrentUser, deleteTask ,updateTask,markTaskAsCompleted} from "../lib/api";
-import { Link, router } from "expo-router";
 import {
-  CustomButton,
-  FormField,
-  FormFieldTextArea,
-  CustomDropdown,
-} from "../components";
+  getCurrentUser,
+  deleteTask,
+  updateTask,
+  markTaskAsCompleted,
+} from "../lib/api";
+import { Link, router } from "expo-router";
+
+import  CustomButton  from "../components/CustomButton";
+import  FormField  from "../components/FormField";
+import  CustomDropdown  from "../components/CustomDropdown";
+import  FormFieldTextArea  from "../components/FormFieldTextArea";
 
 const TaskCard = ({ task }) => {
   const { user, setTask, setIsLogged, setUser } = useGlobalContext();
@@ -42,7 +46,6 @@ const TaskCard = ({ task }) => {
         return ""; // Default color for undefined priority
     }
   };
- 
 
   const handleToggle = () => {
     setShowSuccessModal(true);
@@ -92,7 +95,6 @@ const TaskCard = ({ task }) => {
         title: "",
         description: "",
         priority: "",
-       
       });
       setShowSuccessModal(false);
       setSubmitting(false);
@@ -127,7 +129,7 @@ const TaskCard = ({ task }) => {
     }
   };
 
-  const  handleMarkAsComplete= async () => {
+  const handleMarkAsComplete = async () => {
     Alert.alert("ENTROu");
     if (!task) {
       return Alert.alert("Forneça todos os campos");
@@ -214,13 +216,13 @@ const TaskCard = ({ task }) => {
           >
             <TouchableOpacity
               className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] "
-              onPress={() =>handleToggle()}
+              onPress={() => handleToggle()}
             >
               <Image source={icons.edit} className="w-4 h-4" />
             </TouchableOpacity>
             <TouchableOpacity
               className=" bg-[#333333] justify-center items-center w-8 h-8 rounded-[12px] "
-              onPress={() => handleDeleteTask(task) }
+              onPress={() => handleDeleteTask(task)}
             >
               <Image source={icons.trash} className="w-4 h-4" />
             </TouchableOpacity>
@@ -292,7 +294,7 @@ const TaskCard = ({ task }) => {
           <View className="mb-4 w-full">
             <CustomButton
               title="Salvar tarefa"
-              handlePress={()=>handleEditTask(task)}
+              handlePress={() => handleEditTask(task)}
               containerStyles="mt-7"
               isLoading={isSubmitting}
             />

@@ -1,17 +1,10 @@
-import TaskCard from "./TaskCard";
-import FormField from "./FormField";
-import CustomButton from "./CustomButton";
-import Loader from "./Loader";
-import SearchInput from "./SearchInput";
-import CustomDropdown from "./CustomDropdown";
-import FormFieldTextArea from "./FormFieldTextArea";
 
-export {
-  TaskCard,
-  FormFieldTextArea,
-  CustomDropdown,
-  FormField,
-  CustomButton,
-  Loader,
-  SearchInput,
-};
+export { default as TaskCard } from './TaskCard';
+export { default as FormFieldTextArea } from './FormFieldTextArea';
+export { default as CustomDropdown } from './CustomDropdown';
+export { default as FormField } from './FormField';
+export { default as CustomButton } from './CustomButton';
+export { default as Loader } from './Loader';
+export { default as SearchInput } from './SearchInput';
+export { default as PriorityTabs } from './PriorityTabs';
+

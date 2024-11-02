@@ -16,7 +16,7 @@ const CustomDropdown = ({ selectedValue, onChange, title }) => {
   return (
     <View className="relative">
       <TouchableOpacity
-        className="w-full py-4 bg-[#FFFFFF] rounded-[12px] text-[18px] border-[#C6CFDC] border-[1px] text-left text-[#3F3D56]"
+        className="w-full py-2 bg-[#FFFFFF] rounded-[12px] text-[18px] border-[#C6CFDC] border-[1px] text-left text-[#3F3D56]"
         onPress={() => setIsOpen((prev) => !prev)} // Toggle dropdown
       >
       <Text className="text-[#3F3D56] font-psemibold text-[14px]"> {selectedValue?.label || `${title}`}</Text> 

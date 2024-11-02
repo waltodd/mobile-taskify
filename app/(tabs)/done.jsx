@@ -6,20 +6,21 @@ import { images, icons } from "../../constants";
 import { useGlobalContext } from "../../context/GlobalProvider"; // Import the context
 
 // import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
-import {  SearchInput,TaskCard } from "../../components";
+import {  PriorityTabs,TaskCard } from "../../components";
 
 const Done = () => {
   const { user, tasks } = useGlobalContext();
-
+  const [selectedPriority, setSelectedPriority] = useState(null);
   // Filter only pending tasks
-  const completedTasks = tasks.filter((task) => task.completed);
-
+  const filteredTasks = tasks.filter(task => 
+    !task.completed && (!selectedPriority || task.priority === selectedPriority.value)
+  );
   return (
     <SafeAreaView className="bg-[#FFFFFF] h-full">
       <FlatList
-        data={completedTasks}
+        data={filteredTasks}
         keyExtractor={(task) => task._id}
-
+className="mt-8"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
           paddingBottom: 100,
@@ -55,27 +56,23 @@ const Done = () => {
                 </Text>
             </View>
             <View className="">
-              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">{completedTasks.length}{" "}</Text>tarefas concluidas.</Text>
+              <Text className="text-sm  text-[#8D9CB8]">Tem <Text className="text-sm font-psemibold text-[#1dc071]">{filteredTasks.length}{" "}</Text>tarefas concluidas.</Text>
             </View>
+            <PriorityTabs 
+            className=""
+              title="Select Priority"
+              selectedValue={selectedPriority} 
+              onChange={setSelectedPriority} 
+            />
           </View>
         )}
         ListEmptyComponent={() => (
-          <View className="w-full pb-9 h-full flex flex-col justify-center items-center mt-8">
-            <Image
-              source={images.noresults}
-              className="w-[50px] h-[50px]"
-              resizeMode="contain"
-            />
-            <Text className="text-[14px] py-2 font-psemibold text-[#3F3D56]">
-              Nenhuma tarefa encontrada
-            </Text>
-            <TouchableOpacity className="flex flex-row bg-[#1dc071] justify-center items-center px-3 py-2 rounded-[12px]"
-            
-            >
+          <View className="w-full pb-9 h-full flex flex-col justify-center items-center ">
+            <Image source={images.noresults} className="w-[50px] h-[50px]" resizeMode="contain" />
+            <Text className="text-[14px] py-2 font-psemibold text-[#3F3D56]">Nenhuma tarefa encontrada</Text>
+            <TouchableOpacity className="bg-[#1dc071] flex flex-row justify-center items-center px-3 py-2 rounded-[12px]">
               <Image source={icons.add} className="w-4 h-4" />
-              <Text className="text-[18px]  text-[#FFFFFF] pl-2">
-                Nova tarefa
-              </Text>
+              <Text className="text-[18px] text-[#FFFFFF] pl-2">Nova tarefa</Text>
             </TouchableOpacity>
           </View>
         )}
